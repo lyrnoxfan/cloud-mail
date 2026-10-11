@@ -634,13 +634,15 @@ function close() {
   justify-content: center;
 
   .write-box {
-    background: var(--el-bg-color);
+    background: var(--glass-bg-deep);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
     width: min(1367px, calc(100% - 80px));
-    box-shadow: var(--el-box-shadow-light);
-    border: 1px solid var(--el-border-color-light);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
     transition: var(--el-transition-duration);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 22px;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;

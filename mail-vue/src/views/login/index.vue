@@ -647,6 +647,8 @@ function submitRegister() {
 
 .container {
   background: v-bind(loginOpacity);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   padding-left: 40px;
   padding-right: 40px;
   display: flex;
@@ -654,17 +656,19 @@ function submitRegister() {
   justify-content: center;
   width: 450px;
   height: 100%;
-  border-left: 1px solid var(--login-border);
-  box-shadow: var(--el-box-shadow-light);
+  border: 1px solid var(--glass-border);
+  border-right: none;
+  border-radius: 28px 0 0 28px;
+  box-shadow: var(--glass-shadow);
   @media (max-width: 1024px) {
     padding: 20px 18px;
     width: 384px;
     margin-left: 18px;
   }
   @media (max-width: 767px) {
-    border: 1px solid var(--login-border);
     padding: 20px 18px;
-    border-radius: 6px;
+    border-radius: 24px;
+    border-right: 1px solid var(--glass-border);
     height: fit-content;
     width: 100%;
     margin-right: 18px;

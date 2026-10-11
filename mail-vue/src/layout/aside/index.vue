@@ -5,7 +5,7 @@
         <Icon icon="mdi:email-outline" width="24" height="24" />
         <div>{{settingStore.settings.title}}</div>
       </div>
-      <el-menu :collapse="false" text-color="#fff" active-text-color="#fff" style="margin-top: 10px">
+      <el-menu :collapse="false" style="margin-top: 10px">
         <el-menu-item @click="router.push({name: 'email'})" index="email"
                       :class="route.meta.name === 'email' ? 'choose-item' : ''">
           <Icon icon="hugeicons:mailbox-01" width="20" height="20" />
@@ -124,25 +124,29 @@ const route = useRoute();
 .manage-title {
   margin-top: 10px;
   padding-left: 20px;
-  color: #fff;
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
 }
 
 .el-menu-item {
   margin: 3px 10px !important;
-  border-radius: 6px;
-  height: 36px;
+  border-radius: 12px;
+  height: 38px;
   padding: 10px !important;
+  color: var(--el-text-color-primary);
+  transition: all 0.25s ease;
 }
 
 .choose-item {
-  font-weight: 400;
-  background: var(--aside-menu-active-background) !important;
-  backdrop-filter: blur(4px);
+  font-weight: 600;
+  color: #1890ff !important;
+  background: linear-gradient(135deg, rgba(59, 157, 255, 0.18), rgba(217, 111, 180, 0.1)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 @media (hover: hover) {
   .el-menu-item:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(59, 157, 255, 0.08) !important;
   }
 }
 
@@ -152,15 +156,20 @@ const route = useRoute();
 
 
 :deep(.el-scrollbar__wrap--hidden-default ) {
-  background: var(--aside-backgound) !important;
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 :deep(.el-menu-item) {
-  background: var(--aside-backgound);
+  background: transparent;
 }
 
 :deep(.el-menu) {
-  background: var(--aside-backgound);
+  background: transparent;
+  --el-menu-text-color: var(--el-text-color-primary);
+  --el-menu-active-color: #1890ff;
+  --el-menu-hover-bg-color: rgba(59, 157, 255, 0.08);
 }
 
 .el-menu {

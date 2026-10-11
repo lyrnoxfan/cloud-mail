@@ -446,58 +446,6 @@
               </div>
             </div>
           </div>
-
-          <div class="settings-card about">
-            <div class="card-title">{{ $t('about') }}</div>
-            <div class="card-content">
-              <div class="concerning-item">
-                <span>{{ $t('version') }} :</span>
-                <el-badge is-dot :hidden="!hasUpdate">
-                  <el-button @click="jump('https://github.com/maillab/cloud-mail/releases')">
-                    {{ currentVersion }}
-                    <template #icon>
-                      <Icon icon="qlementine-icons:version-control-16" style="font-size: 20px" color="#1890FF"/>
-                    </template>
-                  </el-button>
-                </el-badge>
-              </div>
-              <div class="concerning-item">
-                <span>{{ $t('community') }} : </span>
-                <div class="community">
-                  <el-button @click="jump('https://github.com/maillab/cloud-mail')">
-                    Github
-                    <template #icon>
-                      <Icon icon="codicon:github-inverted" width="22" height="22"/>
-                    </template>
-                  </el-button>
-                  <el-button @click="jump('https://t.me/cloud_mail_tg')">
-                    Telegram
-                    <template #icon>
-                      <Icon icon="logos:telegram" width="30" height="30"/>
-                    </template>
-                  </el-button>
-                </div>
-              </div>
-              <div class="concerning-item">
-                <span>{{ $t('support') }} : </span>
-                <el-button @click="jump('https://doc.skymail.ink/support.html')">
-                  {{ t('supportDesc') }}
-                  <template #icon>
-                    <Icon color="#79D6B5" icon="simple-icons:buymeacoffee" width="20" height="20"/>
-                  </template>
-                </el-button>
-              </div>
-              <div class="concerning-item">
-                <span>{{ $t('help') }} : </span>
-                <el-button @click="jump('https://doc.skymail.ink')">
-                  {{ t('document') }}
-                  <template #icon>
-                    <Icon color="#79D6B5" icon="fluent-color:document-32" width="18" height="18"/>
-                  </template>
-                </el-button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -1765,7 +1713,7 @@ function editSetting(settingForm, refreshStatus = true) {
 .settings-container {
   height: 100%;
   overflow: hidden;
-  background: var(--settings-page-background) !important;
+  background: transparent !important;
   position: relative;
 
   .loading {
@@ -1842,9 +1790,12 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .settings-card {
-  background-color: var(--el-bg-color);
-  border-radius: 6px;
-  border: 1px solid var(--el-border-color);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   transition: all 300ms;
   overflow: hidden;
   max-width: 900px;

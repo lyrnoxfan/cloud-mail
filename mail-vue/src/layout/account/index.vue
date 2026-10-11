@@ -522,8 +522,10 @@ path[fill="#ffdda1"] {
 <style scoped lang="scss">
 .account-box {
 
-  border-right: 1px solid var(--el-border-color) !important;
-  background-color: var(--el-bg-color);
+  border-right: 1px solid var(--glass-border) !important;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   height: 100%;
   overflow: hidden;
 

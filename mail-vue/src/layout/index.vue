@@ -71,13 +71,23 @@ onBeforeUnmount(() => {
     left: 0;
     z-index: 101;
     height: 100%;
-    background: var(--el-bg-color);
+    margin: 0;
+    border-radius: 0 20px 20px 0;
+    background: var(--glass-bg-deep);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
   }
 }
 
 .el-aside {
   width: auto;
   transition: all 100ms ease;
+  background: transparent;
+  margin: 12px 0 12px 12px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 .layout {
@@ -91,7 +101,7 @@ onBeforeUnmount(() => {
 
 .main-container {
   min-height: 100%;
-  background: var(--el-bg-color);
+  background: transparent;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -101,9 +111,16 @@ onBeforeUnmount(() => {
 }
 
 .el-header {
-  background: var(--el-bg-color);
-  border-bottom: solid 1px var(--el-border-color);
-  padding: 0 0 0 0;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  box-shadow: var(--glass-shadow-sm);
+  margin: 12px 16px 0 16px;
+  padding: 0 12px 0 0;
+  overflow: hidden;
+  height: 60px;
 }
 
 .overlay-show {

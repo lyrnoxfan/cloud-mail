@@ -919,7 +919,14 @@ function loadData() {
   font-size: 14px;
   color: var(--el-text-color-primary);
   overflow: hidden;
-  height: 100%;
+  height: calc(100% - 24px);
+  margin: 12px 16px 12px 16px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
 }
 
 .scroll {

@@ -777,9 +777,12 @@ function createSendGauge() {
     }
 
     .number-item {
-      background: var(--el-bg-color);
-      border-radius: 8px;
-      border: 1px solid var(--el-border-color);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow-sm);
       padding: 21px 20px;
 
       .top {
@@ -863,8 +866,12 @@ function createSendGauge() {
     }
 
     .picture-item {
-      background: var(--el-bg-color);
-      border-radius: 8px;
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow-sm);
+      border-radius: 20px;
       border: 1px solid var(--el-border-color);
 
       .source-button {
@@ -903,9 +910,12 @@ function createSendGauge() {
     }
 
     .picture-cs-item {
-      background: var(--el-bg-color);
-      border-radius: 8px;
-      border: 1px solid var(--el-border-color);
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow-sm);
 
       .send-count {
         height: 350px;
