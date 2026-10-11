@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
   border-radius: 18px;
   box-shadow: var(--glass-shadow-sm);
   margin: 12px 16px 0 16px;
-  padding: 0 12px 0 0;
+  padding: 0 12px;
   height: 60px;
   @media (max-width: 767px) {
     margin: 8px 8px 0 8px;

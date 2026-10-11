@@ -708,6 +708,15 @@ function close() {
       .button-item {
         display: grid;
         grid-template-columns: auto auto 1fr auto;
+        align-items: center;
+        @media (max-width: 767px) {
+          grid-template-columns: auto auto 1fr;
+          row-gap: 10px;
+          > div:last-child {
+            grid-column: 1 / -1;
+            justify-content: flex-end;
+          }
+        }
 
         .att-add {
           cursor: pointer;
