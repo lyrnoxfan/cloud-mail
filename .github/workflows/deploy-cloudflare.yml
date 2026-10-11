@@ -62,12 +62,12 @@ jobs:
           pnpm build
           echo "✅ Frontend build completed."
 
-      - name: 📂 同步前端产物 / Sync frontend dist
+      - name: 📂 检查前端产物 / Check frontend dist
         run: |
-          echo "📂 Syncing frontend dist to worker..."
-          rm -rf ./mail-worker/dist
-          cp -r ./mail-vue/dist ./mail-worker/dist
-          echo "✅ Frontend dist synced."
+          echo "📂 Checking frontend dist..."
+          # vite build（mode release，经 mail-vue/.env.release 的 VITE_OUT_DIR）已直接输出到 ./mail-worker/dist，无需拷贝
+          test -f ./mail-worker/dist/index.html || (echo "❌ ./mail-worker/dist/index.html missing, frontend build output lost" && exit 1)
+          echo "✅ Frontend dist ready."
 
       - name: 📡 禁用 Wrangler 遥测 / Disable wrangler telemetry
         working-directory: ./mail-worker
