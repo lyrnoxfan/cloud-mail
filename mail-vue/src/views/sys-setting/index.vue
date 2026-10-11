@@ -204,6 +204,12 @@
                   </el-button>
                 </div>
               </div>
+              <div class="setting-item" v-if="setting.hasSelfSmtp">
+                <div><span>{{ $t('selfSmtpChannel') }}</span></div>
+                <div>
+                  <span>{{ $t('enabled') }}</span>
+                </div>
+              </div>
               <div class="setting-item">
                 <div><span>{{ $t('blackList') }}</span></div>
                 <div>

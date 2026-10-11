@@ -89,6 +89,7 @@ const settingService = {
 		settingRow.tgBotToken = settingRow.tgBotToken ? `${settingRow.tgBotToken.slice(0, 20)}******` : null;
 		settingRow.hasR2 = !!c.env.r2
 		settingRow.hasCfEmail = !!c.env.email
+		settingRow.hasSelfSmtp = !!c.env.SELF_SMTP_URL
 
 		let regVerifyOpen = false
 		let addVerifyOpen = false
@@ -226,7 +227,8 @@ const settingService = {
 			googleClientId: settingRow.googleClientId,
 			googleSwitch: settingRow.googleSwitch,
 			minEmailPrefix: settingRow.minEmailPrefix,
-			projectLink: settingRow.projectLink
+			projectLink: settingRow.projectLink,
+			hasSelfSmtp: settingRow.hasSelfSmtp
 		};
 	},
 

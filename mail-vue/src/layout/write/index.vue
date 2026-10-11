@@ -61,7 +61,12 @@
                     width="22" height="22"/>
             </div>
           </div>
-          <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <el-select v-if="settingStore.settings.hasSelfSmtp" v-model="form.sendChannel" size="small"
+                       style="width: 118px;" :title="t('sendChannel')">
+              <el-option :label="t('defaultChannel')" value="default"/>
+              <el-option :label="t('selfSmtpChannel')" value="self"/>
+            </el-select>
             <el-button type="primary" @click="sendEmail" v-if="form.sendType === 'reply'">{{ $t('reply') }}</el-button>
             <el-button type="primary" @click="sendEmail" v-else-if="form.sendType === 'forward'">{{ $t('forward') }}</el-button>
             <el-button type="primary" @click="sendEmail" v-else>{{ $t('send') }}</el-button>
@@ -153,6 +158,7 @@ const form = reactive({
   subject: '',
   content: '',
   sendType: '',
+  sendChannel: 'default',
   text: '',
   emailId: 0,
   attachments: [],

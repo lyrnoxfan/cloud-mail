@@ -253,6 +253,7 @@ const emailService = {
 			accountId, //发送账号id
 			name, //发件人名字
 			sendType, //发件类型
+			sendChannel, //发件通道：'self'走自建服务器，不传或其他值走默认通道（Cloudflare Email优先，否则Resend）
 			emailId, //邮件id，如果是回复邮件会带
 			receiveEmail, //收件人邮箱
 			text, //邮件纯文本
@@ -329,10 +330,16 @@ const emailService = {
 		const domain = emailUtils.getDomain(accountRow.email);
 		const resendToken = resendTokens[domain];
 		const useCloudflareEmail = !!c.env.email;
+		const useSelfSmtp = sendChannel === 'self';
 
 		//如果接收方存在站外邮箱，又没有发信服务
-		if (!useCloudflareEmail && !resendToken && !allInternal) {
-			throw new BizError(t('noSendProvider'));
+		if (!allInternal) {
+			if (useSelfSmtp && !c.env.SELF_SMTP_URL) {
+				throw new BizError(t('selfSmtpNotConfigured'));
+			}
+			if (!useSelfSmtp && !useCloudflareEmail && !resendToken) {
+				throw new BizError(t('noSendProvider'));
+			}
 		}
 
 		//没有发件人名字自动截取
@@ -357,10 +364,22 @@ const emailService = {
 
 		let sendResult = {};
 
-		//存在站外邮箱时，如果配置了 Cloudflare Email Service 就优先使用，否则使用 Resend
+		//存在站外邮箱时，自建通道走自有服务器；默认通道下如果配置了 Cloudflare Email Service 就优先使用，否则使用 Resend
 		if (!allInternal) {
 
-			if (useCloudflareEmail) {
+			if (useSelfSmtp) {
+				sendResult = await this.sendBySelfSmtp(c, {
+					name,
+					accountEmail: accountRow.email,
+					receiveEmail,
+					subject,
+					text,
+					html,
+					attachments: [...imageDataList, ...attachments],
+					sendType,
+					messageId: emailRow.messageId
+				});
+			} else if (useCloudflareEmail) {
 				sendResult = await this.sendByCloudflareEmail(c, {
 					name,
 					accountEmail: accountRow.email,
@@ -408,7 +427,7 @@ const emailService = {
 		emailData.content = html;
 		emailData.text = text;
 		emailData.accountId = accountId;
-		emailData.status = useCloudflareEmail ? emailConst.status.DELIVERED : emailConst.status.SENT;
+		emailData.status = (!useSelfSmtp && useCloudflareEmail) ? emailConst.status.DELIVERED : emailConst.status.SENT;
 		emailData.type = emailConst.type.SEND;
 		emailData.userId = userId;
 		emailData.resendEmailId = data?.id;
@@ -528,6 +547,66 @@ const emailService = {
 		}
 
 		return await resend.emails.send(sendForm);
+	},
+
+	//经自建服务器发件：把邮件投递任务 POST 给自建 SMTP 中转服务，由它经本机 postfix 发出
+	async sendBySelfSmtp(c, params) {
+		const url = c.env.SELF_SMTP_URL;
+		const secret = c.env.SELF_SMTP_SECRET || '';
+
+		const payload = {
+			from: { name: params.name, email: params.accountEmail },
+			to: [...params.receiveEmail],
+			subject: params.subject,
+			text: params.text,
+			html: params.html,
+			headers: {},
+			attachments: await this.toResendAttachments(params.attachments)
+		};
+
+		if (params.sendType === 'reply' && params.messageId) {
+			payload.headers = {
+				'in-reply-to': params.messageId,
+				'references': params.messageId
+			};
+		}
+
+		const controller = new AbortController();
+		const timer = setTimeout(() => controller.abort(), 60000);
+
+		let res;
+		try {
+			res = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + secret,
+					'User-Agent': 'cloud-mail-self-smtp/1.0'
+				},
+				body: JSON.stringify(payload),
+				signal: controller.signal
+			});
+		} catch (e) {
+			throw new BizError(t('selfSmtpUnreachable'));
+		} finally {
+			clearTimeout(timer);
+		}
+
+		let body = {};
+		try {
+			body = await res.json();
+		} catch (e) {
+		}
+
+		if (!res.ok || !body.ok) {
+			throw new BizError(body.error ? t('selfSmtpFailed') + ': ' + body.error : t('selfSmtpFailed'));
+		}
+
+		return {
+			data: {
+				id: body.id
+			}
+		};
 	},
 
 	async toCloudflareAttachments(attachments) {
