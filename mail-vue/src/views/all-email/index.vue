@@ -71,7 +71,6 @@
         <el-date-picker popper-class="my-date-picker"
                         v-model="clearTime"
                         type="daterange"
-                        :teleported="false"
                         unlink-panels
                         :range-separator="t('to')"
                         size="default"
