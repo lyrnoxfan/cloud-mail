@@ -927,6 +927,11 @@ function loadData() {
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   box-shadow: var(--glass-shadow);
+  @media (max-width: 767px) {
+    margin: 8px;
+    height: calc(100% - 16px);
+    border-radius: 16px;
+  }
 }
 
 .scroll {
