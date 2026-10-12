@@ -777,12 +777,10 @@ function createSendGauge() {
     }
 
     .number-item {
-      background: var(--glass-bg);
-      -webkit-backdrop-filter: var(--glass-blur);
-      backdrop-filter: var(--glass-blur);
-      border-radius: 20px;
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow-sm);
+      background: var(--card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--separator);
+      box-shadow: var(--shadow-sm);
       padding: 21px 20px;
 
       .top {
@@ -866,11 +864,9 @@ function createSendGauge() {
     }
 
     .picture-item {
-      background: var(--glass-bg);
-      -webkit-backdrop-filter: var(--glass-blur);
-      backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow-sm);
+      background: var(--card);
+      border: 1px solid var(--separator);
+      box-shadow: var(--shadow-sm);
       border-radius: 20px;
       border: 1px solid var(--el-border-color);
 
@@ -910,12 +906,10 @@ function createSendGauge() {
     }
 
     .picture-cs-item {
-      background: var(--glass-bg);
-      -webkit-backdrop-filter: var(--glass-blur);
-      backdrop-filter: var(--glass-blur);
-      border-radius: 20px;
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow-sm);
+      background: var(--card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--separator);
+      box-shadow: var(--shadow-sm);
 
       .send-count {
         height: 350px;

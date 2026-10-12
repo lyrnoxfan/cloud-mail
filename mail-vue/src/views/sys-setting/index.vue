@@ -1764,13 +1764,10 @@ function editSetting(settingForm, refreshStatus = true) {
 }
 
 .settings-card {
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border-radius: 20px;
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  transition: all 300ms;
+  background: var(--card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--separator);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   max-width: 900px;
   width: 100%;
@@ -1778,10 +1775,11 @@ function editSetting(settingForm, refreshStatus = true) {
 
 
 .card-title {
-  font-size: 15px;
-  font-weight: bold;
-  padding: 15px 20px 12px;
-  border-bottom: 1px solid var(--el-border-color);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--separator);
 }
 
 .card-content {

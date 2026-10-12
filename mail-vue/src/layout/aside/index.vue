@@ -83,19 +83,19 @@ const route = useRoute();
 <style lang="scss" scoped>
 
 .title {
-  margin: 15px 10px;
-  height: 45px;
-  border-radius: 6px;
+  margin: 12px 12px 8px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   position: relative;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  color: #ffffff;
-  background: linear-gradient(135deg, #1890ff, #3a80dd);
-  transition: all 0.3s ease;
+  gap: 8px;
+  color: var(--accent);
+  background: var(--accent-soft);
   max-width: 240px;
   padding: 0 10px;
   > div {
@@ -115,50 +115,44 @@ const route = useRoute();
     position: absolute;
     font-size: 12px;
     right: 8px;
-    color: #ffffff;
+    color: var(--accent);
   }
 
 }
 
 
 .manage-title {
-  margin-top: 10px;
-  padding-left: 20px;
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
+  margin-top: 16px;
+  margin-bottom: 4px;
+  padding-left: 24px;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .el-menu-item {
-  margin: 3px 10px !important;
-  border-radius: 12px;
-  height: 38px;
-  padding: 10px !important;
-  color: var(--el-text-color-primary);
-  transition: all 0.25s ease;
+  margin: 1px 12px !important;
+  border-radius: 10px;
+  height: 44px;
+  padding: 0 12px !important;
+  color: var(--text-1);
+  font-size: 15px;
 }
 
 .choose-item {
   font-weight: 600;
-  color: #1890ff !important;
-  background: linear-gradient(135deg, rgba(59, 157, 255, 0.18), rgba(217, 111, 180, 0.1)) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: var(--accent) !important;
+  background: var(--accent-soft) !important;
 }
 
 @media (hover: hover) {
   .el-menu-item:hover {
-    background: rgba(59, 157, 255, 0.08) !important;
+    background: var(--el-fill-color-light) !important;
   }
 }
 
 .menu-name {
   user-select: none;
-}
-
-
-:deep(.el-scrollbar__wrap--hidden-default ) {
-  background: var(--glass-bg) !important;
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
 }
 
 :deep(.el-menu-item) {

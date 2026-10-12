@@ -1,10 +1,14 @@
+/* ============================================================
+   Cloud Mail — iOS 原生设计系统
+   分组背景 + 实心卡片 + 单一蓝色点缀，零渐变、零玻璃拟态
+   ============================================================ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     scrollbar-width: thin;
-    scrollbar-color: var(--dark-border) transparent;
+    scrollbar-color: rgba(120, 120, 128, .4) transparent;
 }
 
 html, body {
@@ -17,419 +21,265 @@ html, body {
     height: 100%;
 }
 
-:deep(.el-input__inner:focus) {
-    background-color: transparent !important;
-    border-color: #dcdfe6 !important;
+/* ---------- 设计变量 ---------- */
+:root {
+    --bg: #F2F2F7;                 /* iOS 分组背景 */
+    --card: #FFFFFF;               /* 卡片 */
+    --card-2: #FFFFFF;
+    --text-1: #000000;
+    --text-2: rgba(60, 60, 67, .6);
+    --text-3: rgba(60, 60, 67, .3);
+    --accent: #007AFF;             /* iOS 蓝 */
+    --accent-soft: rgba(0, 122, 255, .1);
+    --danger: #FF3B30;
+    --success: #34C759;
+    --warning: #FF9500;
+    --separator: rgba(60, 60, 67, .12);
+    --separator-strong: rgba(60, 60, 67, .36);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, .08);
+    --radius-card: 12px;
+    --radius-btn: 10px;
+    --tabbar-bg: rgba(249, 249, 249, .94);
+    --navbar-bg: rgba(249, 249, 249, .94);
+
+    /* 老变量兼容映射 */
+    --dark-border: var(--separator-strong);
+    --base-fill: var(--el-fill-color-light);
+    --extra-light-fill: var(--el-fill-color-light);
+    --light-border: var(--separator);
+    --light-border-color: var(--separator);
+    --light-ill: var(--el-fill-color-light);
+    --regular-text-color: var(--text-1);
+    --secondary-text-color: var(--text-2);
+    --email-scroll-content-color: var(--text-2);
+    --header-actions-border: 0 1px 0 var(--separator);
+    --aside-backgound: var(--card);
+    --choose-account-background: var(--accent-soft);
+    --email-hover-background: var(--el-fill-color-light);
+    --email-right-click-background: var(--accent-soft);
+    --loadding-background: var(--bg);
+    --loading-hide-transition: opacity .3s ease;
+    --message-block-color: rgba(0, 0, 0, .4);
+    --settings-page-background: var(--bg);
+
+    /* Element Plus 对齐 */
+    --el-color-primary: #007AFF;
+    --el-color-primary-light-3: #4DA3FF;
+    --el-color-primary-light-5: #80BFFF;
+    --el-color-primary-light-7: #B3D9FF;
+    --el-color-primary-light-8: #CCE6FF;
+    --el-color-primary-light-9: #E5F2FF;
+    --el-color-primary-dark-2: #0066D6;
+    --el-bg-color: #FFFFFF;
+    --el-bg-color-page: #F2F2F7;
+    --el-text-color-primary: #000000;
+    --el-text-color-regular: rgba(60, 60, 67, .8);
+    --el-text-color-secondary: rgba(60, 60, 67, .6);
+    --el-text-color-placeholder: rgba(60, 60, 67, .3);
+    --el-border-color: rgba(60, 60, 67, .12);
+    --el-border-color-light: rgba(60, 60, 67, .08);
+    --el-border-color-lighter: rgba(60, 60, 67, .06);
+    --el-fill-color-blank: #FFFFFF;
+    --el-fill-color-light: rgba(60, 60, 67, .05);
+    --el-box-shadow-light: 0 4px 16px rgba(0, 0, 0, .08);
+    --el-border-radius-base: 10px;
 }
 
-.el-table thead th {
-    font-weight: bold !important;
+html.dark {
+    --bg: #000000;
+    --card: #1C1C1E;
+    --card-2: #2C2C2E;
+    --text-1: #FFFFFF;
+    --text-2: rgba(235, 235, 245, .6);
+    --text-3: rgba(235, 235, 245, .3);
+    --accent: #0A84FF;
+    --accent-soft: rgba(10, 132, 255, .15);
+    --separator: rgba(84, 84, 88, .6);
+    --separator-strong: rgba(84, 84, 88, .9);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, .3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, .4);
+    --tabbar-bg: rgba(28, 28, 30, .94);
+    --navbar-bg: rgba(28, 28, 30, .94);
+
+    --el-color-primary: #0A84FF;
+    --el-color-primary-light-9: rgba(10, 132, 255, .15);
+    --el-bg-color: #1C1C1E;
+    --el-bg-color-page: #000000;
+    --el-text-color-primary: #FFFFFF;
+    --el-text-color-regular: rgba(235, 235, 245, .8);
+    --el-text-color-secondary: rgba(235, 235, 245, .6);
+    --el-text-color-placeholder: rgba(235, 235, 245, .3);
+    --el-border-color: rgba(84, 84, 88, .6);
+    --el-fill-color-blank: #1C1C1E;
+    --el-fill-color-light: rgba(120, 120, 128, .16);
 }
 
 body {
-    font-family: Inter, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     line-height: 1.5;
-    color: var(--el-text-color-primary);
-    font-size: 14px;
+    color: var(--text-1);
+    font-size: 15px;
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
 }
 
-html, body {
-    background:
-        radial-gradient(1100px 750px at 12% 6%, rgba(176, 209, 255, 0.65), transparent 62%),
-        radial-gradient(950px 700px at 88% 16%, rgba(255, 202, 231, 0.5), transparent 60%),
-        radial-gradient(1000px 900px at 50% 110%, rgba(188, 219, 255, 0.55), transparent 62%),
-        linear-gradient(165deg, #edf3ff 0%, #f4efff 52%, #edf5ff 100%);
-    background-attachment: fixed;
-}
+ul, ol { list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent); text-decoration: none; }
+button { font-family: inherit; }
 
-html.dark, html.dark body {
-    background:
-        radial-gradient(1100px 750px at 12% 6%, rgba(46, 92, 178, 0.28), transparent 62%),
-        radial-gradient(950px 700px at 88% 16%, rgba(168, 84, 150, 0.2), transparent 60%),
-        linear-gradient(165deg, #0d1320 0%, #131a29 55%, #0f1626 100%);
-    background-attachment: fixed;
-}
-
-ul, ol {
-    list-style: none;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-button, input, select, textarea {
-    font-family: inherit;
-    font-size: inherit;
-    outline: none;
-    border: none;
-    background: none;
-}
-
-*:focus {
-    outline: none;
-}
-
-.el-message {
-    white-space: nowrap !important;
-}
-
-.message-bottom {
-    top: auto !important;
-    bottom: 20px !important;
-
-    .el-icon {
-        display: none !important;
-    }
-}
-
-.el-input-group__append, .el-input-group__prepend {
-    color: var(--el-text-color-primary) !important;
-}
-
-.tox .tox-dialog__iframe.tox-dialog__iframe--opaque {
-    background-color: var(--el-bg-color) !important;
-}
-
-.tox .tox-dialog--width-lg {
-    height: 850px !important;
-    @media (max-width: 1024px) {
-        height: calc(100% - 40px) !important;
-    }
-}
-
-.tox .tox-dialog__body-content {
-    overflow: initial !important;
-    max-height: min(850px, calc(100vh - 110px)) !important;
-    @media (max-width: 1024px) {
-        box-sizing: initial !important;
-        max-height: min(850px, calc(100% - 40px)) !important;
-    }
-}
-
-.tox-dialog__body-content {
-    height: auto !important;
-    flex-basis: auto !important;
-}
-
-.tox .tox-collection--grid .tox-collection__group {
-    max-height: 220px !important;
-}
-
-:root {
-    --glass-bg: rgba(255, 255, 255, 0.55);
-    --glass-bg-deep: rgba(255, 255, 255, 0.8);
-    --glass-border: rgba(255, 255, 255, 0.7);
-    --glass-blur: blur(24px) saturate(1.7);
-    --glass-shadow: 0 12px 40px rgba(70, 115, 200, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.65);
-    --glass-shadow-sm: 0 6px 20px rgba(70, 115, 200, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    --glass-radius: 20px;
-    --brand-gradient: linear-gradient(135deg, #3b9dff 0%, #6f7bf2 55%, #d96fb4 100%);
-    --brand-soft: linear-gradient(135deg, rgba(59, 157, 255, 0.16), rgba(217, 111, 180, 0.12));
-
-    --el-color-primary: #1890ff;
-    --el-color-primary-dark-2: #1064c0;
-    --el-color-primary-light-3: #4dabff;
-    --el-color-primary-light-5: #69c0ff;
-    --el-color-primary-light-7: #91d5ff;
-    --el-color-primary-light-9: #e6f7ff;
-
-    --extra-light-fill: #FAFCFF;
-    --settings-page-background: #fafbfc;
-    --light-ill: #F5F7FA;
-    --light-border: #E4E7ED;
-    --header-actions-border: inset 0 -1px 0 0 var(--el-border-color-lighter);
-    --aside-backgound: #191A23;
-    --aside-menu-active-background: #27282D;
-    --loadding-background: rgba(255, 255, 255, 0.8);
-    --dark-border: #CDD0D6;
-    --base-fill: #F0F2F5;
-    --regular-text-color: #585d69;
-    --light-border-color: #e7e9ec;
-    --aside-right-border: 3px 0 5px rgba(0, 21, 41, .35);
-    --choose-account-background: var(--el-color-primary-light-8);
-    --el-text-color-regular: var(--el-text-color-primary);
-    --email-scroll-content-color: rgba(25, 41, 59, 0.4);
-    --email-hover-background: #F2F6FC;
-    --email-right-click-background: #FDF6EC;
-    --login-border: none;
-    --form-desc-color: #71717a;
-    --login-switch-color: #006be6;
-    --scrollbar-track-color: #A8ABB2;
-    --base-border-color: #DCDFE6;
-    --secondary-text-color: #909399;
-    --message-block-color: rgba(0, 0, 0, 0);
-    --loading-hide-transition: all 200ms;
-    --vt-x: 50%;
-    --vt-y: 50%;
-    --vt-duration: 520ms;
-    --vt-easing: ease-out;
-}
-
-.dark {
-    --glass-bg: rgba(22, 27, 40, 0.55);
-    --glass-bg-deep: rgba(22, 27, 40, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.09);
-    --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    --glass-shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    --extra-light-fill: #191919;
-    --settings-page-background: var(--extra-light-fill);
-    --light-ill: #262727;
-    --light-border: #414243;
-    --aside-backgound: #141414;
-    --aside-menu-active-background: rgba(255, 255, 255, 0.08);
-    --header-actions-border: inset 0 -1px 0 0 var(--el-border-color-lighter);
-    --loadding-background: rgba(0, 0, 0, 0.3);
-    --dark-border: #636466;
-    --base-fill: #303030;
-    --regular-text-color: #bfbdbc;
-    --light-border-color: #414243;
-    --aside-right-border: 3px 0 5px #0A0A0A;
-    --choose-account-background: #39393A;
-    --email-scroll-content-color: rgba(255, 255, 255, 0.3);
-    --email-hover-background: #1D1E1F;
-    --email-right-click-background: var(--email-hover-background);
-    --login-border: none;
-    --form-desc-color: #8D9095;
-    --login-switch-color: rgb(102, 177, 255);
-    --scrollbar-track-color: #8D9095;
-    --base-border-color: #4C4D4F;
-    --secondary-text-color: #A3A6AD;
-    --message-block-color: rgba(30, 30, 30, 0.2);
-    --el-border-color: #414243 !important;
-}
-
-.el-input {
-    --el-input-text-color: var(--el-text-color-primary) !important;
-}
-
-/* 视图过渡，基于径向剪裁 */
-html.dark,
-html:not(.dark) {
-    view-transition-name: root;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-}
-
-/* 层级控制，确保对应方向动画在上层可见 */
-html[data-theme-to="dark"]::view-transition-new(root) { z-index: 2; }
-html[data-theme-to="dark"]::view-transition-old(root) { z-index: 1; }
-html[data-theme-to="light"]::view-transition-old(root) { z-index: 2; }
-html[data-theme-to="light"]::view-transition-new(root) { z-index: 1; }
-
-/* 切到暗色：新视图从点击点向外扩散 */
-html[data-theme-to="dark"]::view-transition-new(root) {
-    clip-path: circle(0px at var(--vt-x) var(--vt-y));
-    animation: vt-radial-in var(--vt-duration) var(--vt-easing) forwards;
-}
-
-/* 切到浅色：旧视图向点击点收缩 */
-html[data-theme-to="light"]::view-transition-old(root) {
-    clip-path: circle(var(--vt-end-radius, 0px) at var(--vt-x) var(--vt-y));
-    animation: vt-radial-out var(--vt-duration) var(--vt-easing) forwards;
-}
-
-@keyframes vt-radial-in {
-    from { clip-path: circle(0px at var(--vt-x) var(--vt-y)); }
-    to   { clip-path: circle(var(--vt-end-radius, 0px) at var(--vt-x) var(--vt-y)); }
-}
-
-@keyframes vt-radial-out {
-    from { clip-path: circle(var(--vt-end-radius, 0px) at var(--vt-x) var(--vt-y)); }
-    to   { clip-path: circle(0px at var(--vt-x) var(--vt-y)); }
-}
-
-/* ================= 液态玻璃组件打磨 ================= */
-.glass-card {
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--glass-radius);
-    box-shadow: var(--glass-shadow);
-}
-
+/* ---------- Element Plus 原生化 ---------- */
 .el-button {
-    border-radius: 12px;
+    border-radius: var(--radius-btn);
     font-weight: 500;
-    transition: all 0.25s ease;
 }
-
 .el-button--primary {
-    background: linear-gradient(135deg, #3f9dff, #2f7fe6);
-    border-color: transparent;
-    box-shadow: 0 6px 16px rgba(47, 127, 230, 0.35);
+    background: var(--accent);
+    border-color: var(--accent);
+}
+.el-button--primary:hover, .el-button--primary:focus {
+    background: var(--el-color-primary-dark-2);
+    border-color: var(--el-color-primary-dark-2);
+}
+.el-button.is-plain {
+    background: var(--card);
+    border-color: var(--separator-strong);
+    color: var(--text-1);
 }
 
-.el-button--primary:hover {
-    filter: brightness(1.07);
-    border-color: transparent;
+.el-input__wrapper, .el-textarea__inner {
+    border-radius: var(--radius-btn);
+    background: var(--card);
+    box-shadow: 0 0 0 1px var(--separator) inset;
 }
-
-.el-input__wrapper {
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.65);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 1px 2px rgba(70, 115, 200, 0.06);
-    transition: all 0.25s ease;
+.el-input__wrapper.is-focus, .el-textarea__inner:focus {
+    box-shadow: 0 0 0 2px var(--accent) inset;
 }
-
-.el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-.dark .el-input__wrapper {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.el-textarea__inner {
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.65);
-}
-
-.dark .el-textarea__inner {
-    background: rgba(255, 255, 255, 0.06);
-}
+.el-input__wrapper:hover { box-shadow: 0 0 0 1px var(--separator-strong) inset; }
 
 .el-card {
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--glass-radius);
-    box-shadow: var(--glass-shadow);
+    background: var(--card);
+    border: 1px solid var(--separator);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-1);
 }
+.el-card__header { border-bottom: 1px solid var(--separator); }
 
 .el-dialog {
-    background: var(--glass-bg-deep);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-radius: 22px;
-    box-shadow: var(--glass-shadow);
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow-md);
     overflow: hidden;
 }
+.el-dialog__header { border-bottom: 1px solid var(--separator); margin-right: 0; padding: 16px 20px; }
+.el-dialog__title { font-weight: 600; font-size: 17px; color: var(--text-1); }
+.el-dialog__body { padding: 20px; color: var(--text-1); }
 
-.el-dialog__header {
-    margin-right: 0;
-    padding: 16px 20px 12px;
-    border-bottom: 1px solid var(--glass-border);
-}
+.el-drawer { background: var(--card); }
+.el-drawer__header { border-bottom: 1px solid var(--separator); margin-bottom: 0; padding: 16px 20px; color: var(--text-1); }
 
-.el-drawer {
-    background: var(--glass-bg-deep);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
+.el-dropdown__popper.el-popper, .el-popper {
+    background: var(--card);
+    border: 1px solid var(--separator);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
 }
+.el-dropdown-menu { background: transparent; }
+.el-dropdown-menu__item { color: var(--text-1); border-radius: 8px; margin: 2px 6px; }
+.el-dropdown-menu__item:hover { background: var(--accent-soft); color: var(--accent); }
+.el-popper__arrow::before { background: var(--card) !important; border-color: var(--separator) !important; }
 
-.el-popper.is-pure,
-.el-dropdown__popper,
-.el-select__popper,
-.el-tooltip__popper {
-    background: var(--glass-bg-deep) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    box-shadow: var(--glass-shadow) !important;
-    overflow: hidden;
-}
-
-.el-popper.is-pure .el-popper__arrow::before,
-.el-dropdown__popper .el-popper__arrow::before {
-    background: var(--glass-bg-deep) !important;
-    border: 1px solid var(--glass-border) !important;
-}
-
-.el-table {
-    --el-table-bg-color: transparent;
-    --el-table-tr-bg-color: transparent;
-    --el-table-header-bg-color: transparent;
-    background: transparent;
-}
-
-.el-table th.el-table__cell {
-    background: transparent;
-}
-
-.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
-    background: rgba(59, 157, 255, 0.07);
-}
-
-.el-menu {
-    background: transparent;
-    border-right: none;
-}
-
-.el-tag {
-    border-radius: 10px;
-    border: none;
-}
-
-.el-switch {
-    --el-switch-on-color: #1890ff;
-}
-
-.el-scrollbar__thumb {
-    background: rgba(120, 150, 200, 0.35);
-    border-radius: 8px;
-}
-
-.el-scrollbar__thumb:hover {
-    background: rgba(120, 150, 200, 0.55);
-}
+.el-select__popper { border-radius: 12px; }
 
 .el-message {
-    background: var(--glass-bg-deep) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 14px !important;
-    box-shadow: var(--glass-shadow-sm) !important;
+    background: var(--card);
+    border: 1px solid var(--separator);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
 }
-
 .el-notification {
-    background: var(--glass-bg-deep) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 18px !important;
-    box-shadow: var(--glass-shadow) !important;
+    background: var(--card);
+    border: 1px solid var(--separator);
+    border-radius: 12px;
+}
+.el-message-box {
+    background: var(--card);
+    border-radius: 14px;
+    border: 1px solid var(--separator);
 }
 
-.el-loading-mask {
-    background: rgba(255, 255, 255, 0.35) !important;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    border-radius: inherit;
-}
+.el-table { background: transparent; color: var(--text-1); }
+.el-table th.el-table__cell { background: var(--card); color: var(--text-2); font-weight: 600; }
+.el-table tr { background: transparent; }
+.el-table td.el-table__cell { border-bottom: 1px solid var(--separator); }
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell { background: var(--el-fill-color-light); }
+.el-table__body tr:hover > td.el-table__cell { background: var(--el-fill-color-light); }
 
-.dark .el-loading-mask {
-    background: rgba(10, 14, 24, 0.4) !important;
+.el-pagination button, .el-pagination .el-pager li {
+    background: var(--card);
+    border-radius: 8px;
+    color: var(--text-1);
 }
+.el-pagination .el-pager li.is-active { background: var(--accent); color: #fff; }
 
-.el-checkbox__inner {
-    border-radius: 6px;
-}
+.el-switch.is-checked .el-switch__core { background: var(--success); border-color: var(--success); }
 
-.el-radio__inner {
-    background: rgba(255, 255, 255, 0.7);
-}
+.el-checkbox__inner { border-radius: 6px; }
+.el-checkbox__input.is-checked .el-checkbox__inner { background: var(--accent); border-color: var(--accent); }
 
-.el-pagination .btn-prev,
-.el-pagination .btn-next,
-.el-pagination .el-pager li {
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.5);
-}
+.el-loading-mask { background: rgba(255, 255, 255, .7); border-radius: inherit; }
+html.dark .el-loading-mask { background: rgba(0, 0, 0, .6); }
 
-.dark .el-pagination .btn-prev,
-.dark .el-pagination .btn-next,
-.dark .el-pagination .el-pager li {
-    background: rgba(255, 255, 255, 0.06);
+.el-scrollbar__thumb { background: rgba(120, 120, 128, .4); }
+
+.el-menu { background: transparent; border-right: none; }
+.el-menu-item { border-radius: 10px; margin: 2px 8px; color: var(--text-2); height: 44px; }
+.el-menu-item:hover { background: var(--el-fill-color-light); color: var(--text-1); }
+.el-menu-item.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+.el-tabs__item.is-active, .el-tabs__item:hover { color: var(--accent); }
+.el-tabs__active-bar { background: var(--accent); }
+
+.el-segmented { background: var(--el-fill-color-light); border-radius: 10px; padding: 2px; }
+.el-segmented__item.is-selected { background: var(--card); box-shadow: var(--shadow-sm); border-radius: 8px; }
+
+/* nprogress */
+#nprogress .bar { background: var(--accent); }
+
+/* ---------- 通用工具类 ---------- */
+.ios-card {
+    background: var(--card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--separator);
 }
+.ios-grouped-list {
+    background: var(--card);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid var(--separator);
+}
+.ios-grouped-list > * + * { border-top: 1px solid var(--separator); }
+.ios-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    min-height: 48px;
+    gap: 12px;
+}
+.ios-row:active { background: var(--el-fill-color-light); }
+.ios-section-title {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    padding: 20px 16px 8px;
+}
+.text-1 { color: var(--text-1); }
+.text-2 { color: var(--text-2); }
+.text-3 { color: var(--text-3); }
+.text-accent { color: var(--accent); }
+.text-danger { color: var(--danger); }

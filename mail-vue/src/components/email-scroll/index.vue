@@ -1,5 +1,8 @@
 <template>
   <div class="email-container">
+    <div class="folder-switch" v-if="showFolderSwitch">
+      <el-segmented v-model="folderTab" :options="folderOptions" @change="switchFolder" />
+    </div>
     <div class="header-actions">
       <el-checkbox
           v-model="checkAll"
@@ -247,6 +250,7 @@ import {useI18n} from "vue-i18n";
 import {EmailUnreadEnum} from "@/enums/email-enum.js";
 import { UseVirtualList } from '@vueuse/components'
 import { useScroll } from '@vueuse/core'
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   getEmailList: Function,
@@ -589,6 +593,20 @@ function changeAccountShow() {
   uiStore.accountShow = !uiStore.accountShow;
 }
 
+// 移动端文件夹切换（收件箱/已发送/草稿箱）
+const router = useRouter();
+const folderTab = ref(props.type);
+const showFolderSwitch = computed(() => ['email', 'send', 'draft'].includes(props.type));
+const folderOptions = computed(() => [
+  { label: t('inbox'), value: 'email' },
+  { label: t('sent'), value: 'send' },
+  { label: t('drafts'), value: 'draft' },
+]);
+function switchFolder(v) {
+  router.push({ name: v });
+}
+watch(() => props.type, (v) => { folderTab.value = v; });
+
 const handleRead = async () => {
   const emailIds = getSelectedMailsIds();
   if (!emailIds.length) return;
@@ -914,23 +932,34 @@ function loadData() {
 
 .email-container {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   padding: 0;
-  font-size: 14px;
-  color: var(--el-text-color-primary);
+  font-size: 15px;
+  color: var(--text-1);
   overflow: hidden;
-  height: calc(100% - 24px);
-  margin: 12px 16px 12px 16px;
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: var(--glass-shadow);
+  height: 100%;
+  background: var(--bg);
+  @media (min-width: 768px) {
+    margin: 16px;
+    height: calc(100% - 32px);
+    background: var(--card);
+    border: 1px solid var(--separator);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.folder-switch {
+  display: none;
   @media (max-width: 767px) {
-    margin: 8px;
-    height: calc(100% - 16px);
-    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 16px 4px;
+    background: var(--bg);
+  }
+  :deep(.el-segmented) {
+    width: 100%;
+    max-width: 400px;
   }
 }
 
@@ -993,16 +1022,21 @@ function loadData() {
 
 :deep(.email-row) {
   display: flex;
-  padding: 8px 0;
+  padding: 10px 0;
   justify-content: space-between;
-  box-shadow: var(--header-actions-border);
+  border-bottom: 1px solid var(--separator);
   cursor: pointer;
   align-items: center;
   position: relative;
-  transition: background 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  height: 48px;
+  transition: background 0.15s ease-in-out;
+  min-height: 56px;
+  background: var(--card);
   @media (max-width: 1366px) {
-    height: 83px;
+    min-height: 76px;
+    padding: 10px 0;
+  }
+  &:active {
+    background: var(--el-fill-color-light);
   }
 
   @media (pointer: coarse) {
@@ -1010,9 +1044,9 @@ function loadData() {
     user-select: none;
   }
   &.all-email {
-    height: 65px;
+    min-height: 68px;
     @media (max-width: 1366px) {
-      height: 132px;
+      min-height: 120px;
     }
   }
   .user-info {
@@ -1294,19 +1328,19 @@ function loadData() {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 15px;
-  padding: 3px 15px;
-  box-shadow: var(--header-actions-border);
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--card);
+  border-bottom: 1px solid var(--separator);
 
   .header-left {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     position: relative;
-    column-gap: 20px;
+    column-gap: 16px;
     row-gap: 8px;
-    padding-left: 2px;
-    color: var(--el-text-color-primary);;
+    color: var(--text-1);
   }
 
   .header-right {

@@ -2,6 +2,7 @@
   <div class="box">
     <div class="container">
       <div class="title">{{$t('profile')}}</div>
+      <div class="item-wrap">
       <div class="item">
         <div>{{$t('username')}}</div>
         <div>
@@ -29,9 +30,11 @@
           <el-button type="primary" @click="pwdShow = true">{{$t('changePwdBtn')}}</el-button>
         </div>
       </div>
+      </div>
     </div>
     <div class="language">
       <div class="title">{{$t('language')}}</div>
+      <div class="lang-wrap">
       <el-select
           :model-value="langSelect"
           class="language-select"
@@ -41,14 +44,17 @@
         <el-option label="中文" value="zh" @pointerdown.prevent.stop="changeLang('zh')"/>
         <el-option label="English" value="en" @pointerdown.prevent.stop="changeLang('en')"/>
       </el-select>
+      </div>
     </div>
     <div class="del-email" v-perm="'my:delete'">
       <div class="title">{{$t('deleteUser')}}</div>
-      <div style="color: var(--regular-text-color);">
+      <div class="del-wrap">
+      <div style="color: var(--text-2);">
         {{$t('delAccountMsg')}}
       </div>
       <div>
-        <el-button type="primary" @click="deleteConfirm">{{$t('deleteUserBtn')}}</el-button>
+        <el-button type="danger" @click="deleteConfirm">{{$t('deleteUserBtn')}}</el-button>
+      </div>
       </div>
     </div>
     <el-dialog v-model="pwdShow" :title="$t('changePassword')" width="340">
@@ -209,90 +215,90 @@ function submitPwd() {
 </script>
 <style scoped lang="scss">
 .box {
-  padding: 40px 40px;
-
-  @media (max-width: 767px) {
-    padding: 30px 30px;
-  }
-
-  .update-pwd {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 0 16px 40px;
+  -webkit-overflow-scrolling: touch;
+  @media (min-width: 768px) {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 24px 48px;
   }
 
   .title {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 22px 16px 8px;
   }
 
-  .container {
-    font-size: 14px;
-    display: grid;
-    gap: 20px;
-    margin-bottom: 40px;
+  .item-wrap, .lang-wrap, .del-wrap {
+    background: var(--card);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--separator);
+    overflow: hidden;
+  }
 
+  .item-wrap {
+    font-size: 15px;
     .item {
-      display: grid;
-      grid-template-columns: 50px 1fr;
-      gap: 140px;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      min-height: 52px;
+      + .item { border-top: 1px solid var(--separator); }
+      > div:first-child { color: var(--text-1); flex-shrink: 0; }
+      > div:last-child {
+        color: var(--text-2);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: right;
+        min-width: 0;
+      }
       .user-name {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        span:first-child {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: flex-end;
+        > span:first-child {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
         }
       }
-
+      .edit-name { color: var(--accent); cursor: pointer; flex-shrink: 0; }
       .edit-name-input {
-        position: absolute;
-        bottom: -6px;
-        .el-input {
-          width: min(200px,calc(100vw - 222px));
-        }
-      }
-
-      .edit-name {
-        color: #4dabff;
-        padding-left: 10px;
-        cursor: pointer;
-      }
-
-      @media (max-width: 767px) {
-        gap: 70px;
-      }
-
-      div:first-child {
-        font-weight: bold;
-      }
-
-      div:last-child {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        .el-input { width: 160px; }
       }
     }
   }
 
-  .language {
+  .lang-wrap {
+    padding: 12px 16px;
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 40px;
-
-    .language-select {
-      width: 100px;
-    }
+    justify-content: flex-end;
+    .language-select { width: 160px; }
   }
 
-  .del-email {
+  .del-wrap {
+    padding: 14px 16px;
     font-size: 14px;
+    color: var(--text-2);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
+    .el-button { align-self: flex-start; }
+  }
+
+  .update-pwd {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 }
 </style>

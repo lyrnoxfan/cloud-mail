@@ -280,24 +280,23 @@ const handleDelete = () => {
 </script>
 <style scoped lang="scss">
 .box {
-  height: calc(100% - 24px);
-  margin: 12px 16px;
+  height: 100%;
   overflow: hidden;
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: var(--glass-shadow);
-  @media (max-width: 767px) {
-    margin: 8px;
-    height: calc(100% - 16px);
-    border-radius: 16px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  @media (min-width: 768px) {
+    margin: 16px;
+    height: calc(100% - 32px);
+    background: var(--card);
+    border: 1px solid var(--separator);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
   }
 }
 
 .header-actions {
-  padding: 9px 15px 8px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
   gap: 20px;

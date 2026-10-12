@@ -632,17 +632,16 @@ function close() {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2000;
 
   .write-box {
-    background: var(--glass-bg-deep);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    width: min(1367px, calc(100% - 80px));
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
+    background: var(--card);
+    width: min(900px, calc(100% - 80px));
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--separator);
     transition: var(--el-transition-duration);
-    padding: 15px;
-    border-radius: 22px;
+    padding: 0;
+    border-radius: 14px;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
@@ -651,17 +650,18 @@ function close() {
       height: 100%;
       border-radius: 0;
       border: 0;
-      padding-top: 10px;
     }
 
     @media (min-width: 1025px) {
-      height: min(800px, calc(100vh - 60px));
+      height: min(720px, calc(100vh - 60px));
     }
 
     .title {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--separator);
 
       .title-left {
         align-items: center;
@@ -700,7 +700,9 @@ function close() {
       height: 100%;
       display: grid;
       grid-template-rows: auto auto 1fr auto;
-      gap: 15px;
+      gap: 12px;
+      padding: 16px;
+      overflow-y: auto;
 
       .item-title {
       }

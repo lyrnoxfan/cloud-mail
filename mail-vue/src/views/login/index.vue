@@ -1,13 +1,6 @@
 <template>
   <div id="login-box" :style=" background ? 'background: var(--el-bg-color)' : ''" v-loading="oauthLoading" element-loading-text="登录中...">
-    <div id="background-wrap" v-if="!settingStore.settings.background">
-      <div class="x1 cloud"></div>
-      <div class="x2 cloud"></div>
-      <div class="x3 cloud"></div>
-      <div class="x4 cloud"></div>
-      <div class="x5 cloud"></div>
-    </div>
-    <div v-else :style="background"></div>
+    <div v-if="settingStore.settings.background" :style="background"></div>
     <div class="form-wrapper">
       <div class="container">
         <span class="form-title">{{ settingStore.settings.title }}</span>
@@ -255,11 +248,6 @@ window.loadAfter = (e) => {
 window.loadBefore = (e) => {
   console.log('loadBefore')
 }
-
-const loginOpacity = computed(() => {
-  const opacity = settingStore.settings.loginOpacity
-  return uiStore.dark ? `rgba(0, 0, 0, ${opacity})` : `rgba(255, 255, 255, ${opacity})`
-})
 
 const hideLoginDomain = computed(() => settingStore.settings.loginDomain === 1)
 
@@ -634,62 +622,47 @@ function submitRegister() {
 
 .form-wrapper {
   position: fixed;
-  right: 0;
-  height: 100%;
+  inset: 0;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  @media (max-width: 767px) {
-    width: 100%;
-  }
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .container {
-  background: v-bind(loginOpacity);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  padding-left: 40px;
-  padding-right: 40px;
+  background: var(--card);
+  padding: 36px 32px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 450px;
-  height: 100%;
-  border: 1px solid var(--glass-border);
-  border-right: none;
-  border-radius: 28px 0 0 28px;
-  box-shadow: var(--glass-shadow);
-  @media (max-width: 1024px) {
-    padding: 20px 18px;
-    width: 384px;
-    margin-left: 18px;
-  }
-  @media (max-width: 767px) {
-    padding: 20px 18px;
-    border-radius: 24px;
-    border-right: 1px solid var(--glass-border);
-    height: fit-content;
-    width: 100%;
-    margin-right: 18px;
-    margin-left: 18px;
-  }
+  width: 400px;
+  max-width: 100%;
+  border: 1px solid var(--separator);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  margin: auto;
 
   .btn {
-    height: 36px;
+    height: 44px;
     width: 100%;
-    border-radius: 6px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
   }
 
   .form-desc {
-    margin-top: 5px;
-    margin-bottom: 18px;
-    color: var(--form-desc-color);
+    margin-top: 6px;
+    margin-bottom: 24px;
+    color: var(--text-2);
+    font-size: 15px;
   }
 
   .form-title {
-    font-weight: bold;
-    font-size: 22px !important;
+    font-weight: 700;
+    font-size: 28px !important;
+    letter-spacing: -0.02em;
   }
 
   .switch {
@@ -697,7 +670,7 @@ function submitRegister() {
     text-align: center;
 
     span {
-      color: var(--login-switch-color);
+      color: var(--accent);
       cursor: pointer;
     }
   }
@@ -810,78 +783,5 @@ function submitRegister() {
   grid-template-columns: 1fr;
 }
 
-
-#background-wrap {
-  height: 100%;
-  z-index: 0;
-}
-
-@keyframes animateCloud {
-  0% {
-    margin-left: -500px;
-  }
-
-  100% {
-    margin-left: 100%;
-  }
-}
-
-.x1 {
-  animation: animateCloud 30s linear infinite;
-  transform: scale(0.65);
-}
-
-.x2 {
-  animation: animateCloud 15s linear infinite;
-  transform: scale(0.3);
-}
-
-.x3 {
-  animation: animateCloud 25s linear infinite;
-  transform: scale(0.5);
-}
-
-.x4 {
-  animation: animateCloud 13s linear infinite;
-  transform: scale(0.4);
-}
-
-.x5 {
-  animation: animateCloud 20s linear infinite;
-  transform: scale(0.55);
-}
-
-.cloud {
-  background: linear-gradient(to bottom, #fff 5%, #f1f1f1 100%);
-  border-radius: 100px;
-  box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
-  height: 120px;
-  width: 350px;
-  position: relative;
-}
-
-.cloud:after,
-.cloud:before {
-  content: "";
-  position: absolute;
-  background: #fff;
-  z-index: -1;
-}
-
-.cloud:after {
-  border-radius: 100px;
-  height: 100px;
-  left: 50px;
-  top: -50px;
-  width: 100px;
-}
-
-.cloud:before {
-  border-radius: 200px;
-  height: 180px;
-  width: 180px;
-  right: 50px;
-  top: -90px;
-}
 
 </style>

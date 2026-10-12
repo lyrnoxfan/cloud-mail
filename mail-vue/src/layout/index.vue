@@ -10,12 +10,36 @@
         @click="uiStore.asideShow = false"
     ></div>
     <el-container class="main-container">
-      <el-main>
-        <el-header>
-            <Header />
-        </el-header>
+      <el-header class="navbar">
+        <Header />
+      </el-header>
+      <el-main class="main">
         <Main />
       </el-main>
+      <!-- 移动端底部 Tab -->
+      <nav class="tabbar" v-if="isMobileTab">
+        <div class="tab" :class="{active: tabActive('email')}" @click="goTab('email')">
+          <Icon icon="hugeicons:mailbox-01" width="24" height="24" />
+          <span>{{ $t('inbox') }}</span>
+        </div>
+        <div class="tab" :class="{active: tabActive('star')}" @click="goTab('star')">
+          <Icon icon="solar:star-line-duotone" width="24" height="24" />
+          <span>{{ $t('starred') }}</span>
+        </div>
+        <div class="tab compose-tab" @click="openCompose" v-perm="'email:send'">
+          <div class="compose-btn">
+            <Icon icon="material-symbols:edit-outline-sharp" width="24" height="24" />
+          </div>
+        </div>
+        <div class="tab" @click="toggleAside">
+          <Icon icon="solar:hamburger-menu-linear" width="24" height="24" />
+          <span>{{ $t('more') }}</span>
+        </div>
+        <div class="tab" :class="{active: tabActive('setting')}" @click="goTab('setting')">
+          <Icon icon="fluent:settings-48-regular" width="24" height="24" />
+          <span>{{ $t('settings') }}</span>
+        </div>
+      </nav>
     </el-container>
   </el-container>
   <writer ref="writerRef" />
@@ -25,21 +49,34 @@
 import Aside from '@/layout/aside/index.vue'
 import Header from '@/layout/header/index.vue'
 import Main from '@/layout/main/index.vue'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import {useUiStore} from "@/store/ui.js";
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { useUiStore } from "@/store/ui.js";
+import { useRoute, useRouter } from "vue-router";
+import { Icon } from "@iconify/vue";
 import writer from '@/layout/write/index.vue'
 
 const uiStore = useUiStore();
+const route = useRoute();
+const router = useRouter();
 const writerRef = ref({})
 const isMobile = ref(window.innerWidth < 1025)
+const isMobileTab = ref(window.innerWidth < 768)
 const handleResize = () => {
   isMobile.value = window.innerWidth < 1025
+  isMobileTab.value = window.innerWidth < 768
   uiStore.asideShow = window.innerWidth > 1024;
 }
 
+const tabActive = (name) => route.meta.name === name
+const goTab = (name) => {
+  uiStore.asideShow = false
+  router.push({ name })
+}
+const toggleAside = () => { uiStore.asideShow = !uiStore.asideShow }
+const openCompose = () => { uiStore.writerRef?.open() }
+
 onMounted(() => {
   uiStore.writerRef = writerRef
-
   window.addEventListener('resize', handleResize)
   handleResize()
 })
@@ -50,46 +87,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-.el-aside-hide {
-  position: fixed;
-  left: 0;
-  height: 100%;
-  z-index: 100;
-  transform: translateX(-100%);
-  transition: all 100ms ease;
-}
-
-.aside-show {
-  -webkit-box-shadow: var(--aside-right-border);
-  box-shadow: var(--aside-right-border);
-  transform: translateX(0);
-  transition: all 100ms ease;
-  z-index: 101;
-  @media (max-width: 1025px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 101;
-    height: 100%;
-    margin: 0;
-    border-radius: 0 20px 20px 0;
-    background: var(--glass-bg-deep);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-  }
-}
-
-.el-aside {
-  width: auto;
-  transition: all 100ms ease;
-  background: transparent;
-  margin: 12px 0 12px 12px;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-}
-
 .layout {
   height: 100%;
   position: fixed;
@@ -97,32 +94,117 @@ onBeforeUnmount(() => {
   top: 0;
   left: 0;
   overflow: hidden;
+  background: var(--bg);
+}
+
+/* ---------- 桌面端侧边栏 ---------- */
+.aside {
+  width: 264px;
+  background: var(--card);
+  border-right: 1px solid var(--separator);
+  transition: margin .2s ease, transform .2s ease;
+  overflow: hidden;
+  z-index: 60;
+}
+.el-aside-hide {
+  margin-left: -264px;
+  @media (max-width: 1025px) {
+    margin-left: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 100;
+    transform: translateX(-105%);
+    box-shadow: var(--shadow-md);
+  }
+}
+.aside-show {
+  @media (max-width: 1025px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 101;
+    transform: translateX(0);
+    box-shadow: var(--shadow-md);
+  }
 }
 
 .main-container {
   min-height: 100%;
-  background: transparent;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  background: var(--bg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.el-main {
+/* ---------- 顶栏：iOS 导航栏风 ---------- */
+.navbar {
+  height: 56px;
+  min-height: 56px;
+  background: var(--navbar-bg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--separator);
+  padding: 0 8px 0 4px;
+  z-index: 50;
+}
+
+/* ---------- 主内容 ---------- */
+.main {
   padding: 0;
+  flex: 1;
+  overflow: hidden;
+  background: var(--bg);
 }
 
-.el-header {
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 18px;
-  box-shadow: var(--glass-shadow-sm);
-  margin: 12px 16px 0 16px;
-  padding: 0 12px;
-  height: 60px;
+/* ---------- 移动端底部 Tab ---------- */
+.tabbar {
+  display: none;
   @media (max-width: 767px) {
-    margin: 8px 8px 0 8px;
-    border-radius: 16px;
+    display: flex;
+  }
+  align-items: stretch;
+  background: var(--tabbar-bg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--separator);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 50;
+  min-height: 58px;
+  .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--text-3);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 6px 0 8px;
+    cursor: pointer;
+    min-height: 48px;
+    &.active { color: var(--accent); }
+    &:active { opacity: .6; }
+  }
+  .compose-tab {
+    flex: 1;
+    .compose-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -18px;
+      box-shadow: 0 4px 12px rgba(0, 122, 255, .35);
+      border: 4px solid var(--bg);
+    }
+    &:active .compose-btn { opacity: .85; }
   }
 }
 
@@ -134,12 +216,9 @@ onBeforeUnmount(() => {
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
   z-index: 99;
-  transition: all 0.3s;
+  transition: opacity 0.25s;
 }
-
 .overlay-hide {
-  display: flex;
-  pointer-events: none;
-  opacity: 0;
+  display: none;
 }
 </style>

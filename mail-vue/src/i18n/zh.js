@@ -4,6 +4,7 @@ const zh = {
     sent: '已发送',
     starred: '星标邮件',
     settings: '个人设置',
+    more: '更多',
     analytics: '分析页',
     allUsers: '用户列表',
     allMail: '全部邮件',
