@@ -409,13 +409,14 @@ function formatName(email) {
 }
 
 .breadcrumb-item {
-  font-weight: 700;
-  font-size: 17px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: .14em;
   color: var(--text-1);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  letter-spacing: -0.01em;
 }
 
 .toolbar {

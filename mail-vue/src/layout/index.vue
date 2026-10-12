@@ -201,7 +201,7 @@ onBeforeUnmount(() => {
       align-items: center;
       justify-content: center;
       margin-top: -18px;
-      box-shadow: 0 4px 12px rgba(0, 122, 255, .35);
+      box-shadow: 0 4px 12px rgba(207, 99, 144, .35);
       border: 4px solid var(--bg);
     }
     &:active .compose-btn { opacity: .85; }

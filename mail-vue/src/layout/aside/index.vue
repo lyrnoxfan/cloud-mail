@@ -2,8 +2,8 @@
   <el-scrollbar class="scroll">
     <div>
       <div class="title" >
-        <Icon icon="mdi:email-outline" width="24" height="24" />
-        <div>{{settingStore.settings.title}}</div>
+        <span class="seal">信</span>
+        <div class="site-name">{{settingStore.settings.title}}</div>
       </div>
       <el-menu :collapse="false" style="margin-top: 10px">
         <el-menu-item @click="router.push({name: 'email'})" index="email"
@@ -83,41 +83,25 @@ const route = useRoute();
 <style lang="scss" scoped>
 
 .title {
-  margin: 12px 12px 8px;
-  height: 48px;
-  border-radius: 12px;
+  margin: 16px 12px 12px;
   display: flex;
-  position: relative;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  max-width: 240px;
-  padding: 0 10px;
-  > div {
+  gap: 10px;
+  padding: 0 8px;
+  .seal {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+  .site-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    letter-spacing: .12em;
+    color: var(--text-1);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: calc(240px - 20px - 30px);
   }
-
-  :deep(.el-icon) {
-    flex-shrink: 0;
-    font-size: 20px;
-  }
-
-  .user-right-icon {
-    align-self: center;
-    position: absolute;
-    font-size: 12px;
-    right: 8px;
-    color: var(--accent);
-  }
-
 }
 
 
@@ -162,8 +146,8 @@ const route = useRoute();
 :deep(.el-menu) {
   background: transparent;
   --el-menu-text-color: var(--el-text-color-primary);
-  --el-menu-active-color: #1890ff;
-  --el-menu-hover-bg-color: rgba(59, 157, 255, 0.08);
+  --el-menu-active-color: var(--accent);
+  --el-menu-hover-bg-color: var(--accent-soft);
 }
 
 .el-menu {

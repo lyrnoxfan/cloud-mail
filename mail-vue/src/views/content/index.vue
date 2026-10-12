@@ -330,9 +330,11 @@ const handleDelete = () => {
   }
 
   .email-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    margin-bottom: 12px;
   }
 
   .htm-scrollbar {

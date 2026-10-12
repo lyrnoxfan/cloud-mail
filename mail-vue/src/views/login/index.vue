@@ -3,7 +3,10 @@
     <div v-if="settingStore.settings.background" :style="background"></div>
     <div class="form-wrapper">
       <div class="container">
-        <span class="form-title">{{ settingStore.settings.title }}</span>
+        <div class="login-brand">
+          <span class="seal">信</span>
+          <span class="form-title">{{ settingStore.settings.title }}</span>
+        </div>
         <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>
         <span class="form-desc" v-else>{{ $t('regTitle') }}</span>
         <div v-show="show === 'login'">
@@ -138,7 +141,7 @@
       </div>
     </el-dialog>
     <a v-show="settingStore.settings.projectLink" class="github" href="https://github.com/maillab/cloud-mail">
-      <Icon icon="mingcute:github-line" color="#1890ff" width="20" height="20" />
+      <Icon icon="mingcute:github-line" color="#8f887a" width="20" height="20" />
     </a>
   </div>
 </template>
@@ -659,10 +662,23 @@ function submitRegister() {
     font-size: 15px;
   }
 
+  .login-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+    .seal {
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+    }
+  }
+
   .form-title {
-    font-weight: 700;
-    font-size: 28px !important;
-    letter-spacing: -0.02em;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 30px !important;
+    letter-spacing: .1em;
   }
 
   .switch {

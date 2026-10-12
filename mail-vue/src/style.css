@@ -1,6 +1,6 @@
 /* ============================================================
-   Cloud Mail — iOS 原生设计系统
-   分组背景 + 实心卡片 + 单一蓝色点缀，零渐变、零玻璃拟态
+   Cloud Mail — 「花信」皮肤
+   日系杂志纸张排版：纸色底、墨色字、宋体衬线、粉蓝点缀、细线分隔
    ============================================================ */
 * {
     margin: 0;
@@ -23,25 +23,29 @@ html, body {
 
 /* ---------- 设计变量 ---------- */
 :root {
-    --bg: #F2F2F7;                 /* iOS 分组背景 */
-    --card: #FFFFFF;               /* 卡片 */
-    --card-2: #FFFFFF;
-    --text-1: #000000;
-    --text-2: rgba(60, 60, 67, .6);
-    --text-3: rgba(60, 60, 67, .3);
-    --accent: #007AFF;             /* iOS 蓝 */
-    --accent-soft: rgba(0, 122, 255, .1);
-    --danger: #FF3B30;
-    --success: #34C759;
-    --warning: #FF9500;
-    --separator: rgba(60, 60, 67, .12);
-    --separator-strong: rgba(60, 60, 67, .36);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, .08);
+    --bg: #faf8f3;                 /* 纸色 */
+    --card: #fffdf9;               /* 卡片：暖白 */
+    --card-2: #fffdf9;
+    --text-1: #26262e;             /* 墨色 */
+    --text-2: #8f887a;
+    --text-3: #b6ad9c;
+    --accent: #cf6390;             /* 深粉 */
+    --accent-soft: rgba(207, 99, 144, .1);
+    --accent-2: #5b7fd6;           /* 花信蓝 */
+    --accent-2-soft: rgba(91, 127, 214, .1);
+    --danger: #b34434;
+    --success: #6a9a6b;
+    --warning: #c08a3e;
+    --separator: #e7ddcc;          /* 细线 */
+    --separator-strong: #d3c2a4;
+    --shadow-sm: 0 1px 3px rgba(90, 70, 50, .07);
+    --shadow-md: 0 4px 16px rgba(90, 70, 50, .1);
     --radius-card: 12px;
     --radius-btn: 10px;
-    --tabbar-bg: rgba(249, 249, 249, .94);
-    --navbar-bg: rgba(249, 249, 249, .94);
+    --tabbar-bg: rgba(250, 248, 243, .94);
+    --navbar-bg: rgba(250, 248, 243, .94);
+    --serif: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+    --latin: "Didot", "Bodoni MT", Georgia, serif;
 
     /* 老变量兼容映射 */
     --dark-border: var(--separator-strong);
@@ -64,52 +68,54 @@ html, body {
     --settings-page-background: var(--bg);
 
     /* Element Plus 对齐 */
-    --el-color-primary: #007AFF;
-    --el-color-primary-light-3: #4DA3FF;
-    --el-color-primary-light-5: #80BFFF;
-    --el-color-primary-light-7: #B3D9FF;
-    --el-color-primary-light-8: #CCE6FF;
-    --el-color-primary-light-9: #E5F2FF;
-    --el-color-primary-dark-2: #0066D6;
-    --el-bg-color: #FFFFFF;
-    --el-bg-color-page: #F2F2F7;
-    --el-text-color-primary: #000000;
-    --el-text-color-regular: rgba(60, 60, 67, .8);
-    --el-text-color-secondary: rgba(60, 60, 67, .6);
-    --el-text-color-placeholder: rgba(60, 60, 67, .3);
-    --el-border-color: rgba(60, 60, 67, .12);
-    --el-border-color-light: rgba(60, 60, 67, .08);
-    --el-border-color-lighter: rgba(60, 60, 67, .06);
-    --el-fill-color-blank: #FFFFFF;
-    --el-fill-color-light: rgba(60, 60, 67, .05);
-    --el-box-shadow-light: 0 4px 16px rgba(0, 0, 0, .08);
+    --el-color-primary: #cf6390;
+    --el-color-primary-light-3: #dd8aa9;
+    --el-color-primary-light-5: #e8a9c2;
+    --el-color-primary-light-7: #f2c8d8;
+    --el-color-primary-light-8: #f7dcea;
+    --el-color-primary-light-9: #fbeef4;
+    --el-color-primary-dark-2: #b04e78;
+    --el-bg-color: #fffdf9;
+    --el-bg-color-page: #faf8f3;
+    --el-text-color-primary: #26262e;
+    --el-text-color-regular: #4a4a52;
+    --el-text-color-secondary: #8f887a;
+    --el-text-color-placeholder: #b6ad9c;
+    --el-border-color: #e7ddcc;
+    --el-border-color-light: #efe6d4;
+    --el-border-color-lighter: #f4ecdc;
+    --el-fill-color-blank: #fffdf9;
+    --el-fill-color-light: rgba(143, 136, 122, .08);
+    --el-box-shadow-light: 0 4px 16px rgba(90, 70, 50, .1);
     --el-border-radius-base: 10px;
 }
 
 html.dark {
-    --bg: #000000;
-    --card: #1C1C1E;
-    --card-2: #2C2C2E;
-    --text-1: #FFFFFF;
-    --text-2: rgba(235, 235, 245, .6);
-    --text-3: rgba(235, 235, 245, .3);
-    --accent: #0A84FF;
-    --accent-soft: rgba(10, 132, 255, .15);
-    --separator: rgba(84, 84, 88, .6);
-    --separator-strong: rgba(84, 84, 88, .9);
+    --bg: #16161d;
+    --card: #1e1e26;
+    --card-2: #23232c;
+    --text-1: #ece7da;
+    --text-2: #8a8577;
+    --text-3: #5c584e;
+    --accent: #e78fae;
+    --accent-soft: rgba(231, 143, 174, .14);
+    --accent-2: #8ba3e0;
+    --accent-2-soft: rgba(139, 163, 224, .14);
+    --separator: #2e2c33;
+    --separator-strong: #3d3a44;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, .3);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, .4);
-    --tabbar-bg: rgba(28, 28, 30, .94);
-    --navbar-bg: rgba(28, 28, 30, .94);
+    --tabbar-bg: rgba(22, 22, 29, .94);
+    --navbar-bg: rgba(22, 22, 29, .94);
 
-    --el-color-primary: #0A84FF;
-    --el-color-primary-light-9: rgba(10, 132, 255, .15);
-    --el-bg-color: #1C1C1E;
-    --el-bg-color-page: #000000;
-    --el-text-color-primary: #FFFFFF;
-    --el-text-color-regular: rgba(235, 235, 245, .8);
-    --el-text-color-secondary: rgba(235, 235, 245, .6);
-    --el-text-color-placeholder: rgba(235, 235, 245, .3);
+    --el-color-primary: #e78fae;
+    --el-color-primary-light-9: rgba(231, 143, 174, .14);
+    --el-bg-color: #1e1e26;
+    --el-bg-color-page: #16161d;
+    --el-text-color-primary: #ece7da;
+    --el-text-color-regular: #b9b4a6;
+    --el-text-color-secondary: #8a8577;
+    --el-text-color-placeholder: #5c584e;
     --el-border-color: rgba(84, 84, 88, .6);
     --el-fill-color-blank: #1C1C1E;
     --el-fill-color-light: rgba(120, 120, 128, .16);
@@ -122,6 +128,36 @@ body {
     font-size: 15px;
     background: var(--bg);
     -webkit-font-smoothing: antialiased;
+}
+
+/* 花信纸纹 */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html.dark body::after { opacity: .07; }
+
+.serif { font-family: var(--serif); }
+.latin { font-family: var(--latin); }
+
+/* 印章 */
+.seal {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: var(--serif);
+    font-size: 19px;
+    transform: rotate(-6deg);
+    flex-shrink: 0;
 }
 
 ul, ol { list-style: none; }
