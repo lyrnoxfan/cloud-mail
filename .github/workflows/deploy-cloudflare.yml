@@ -20,7 +20,8 @@ jobs:
       ADMIN: ${{ secrets.ADMIN || vars.ADMIN }}
       JWT_SECRET: ${{ secrets.JWT_SECRET || vars.JWT_SECRET }}
       INIT_SECRET: ${{ secrets.INIT_SECRET || vars.INIT_SECRET }}
-      RESEND_WEBHOOK_SECRET: ${{ secrets.RESEND_WEBHOOK_SECRET || vars.RESEND_WEBHOOK_SECRET }}
+      SELF_SMTP_URL: ${{ secrets.SELF_SMTP_URL || vars.SELF_SMTP_URL }}
+      SELF_SMTP_SECRET: ${{ secrets.SELF_SMTP_SECRET || vars.SELF_SMTP_SECRET }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN || vars.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
       D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID || vars.D1_DATABASE_ID }}
@@ -90,6 +91,16 @@ jobs:
             echo "❌ INIT_SECRET variable is empty or contains invalid characters (?, %, #, /, \\)."
             exit 1
           fi
+
+          if [ -z "$SELF_SMTP_URL" ]; then
+            echo "❌ SELF_SMTP_URL variable is empty."
+            exit 1
+          fi
+
+          if [ -z "$SELF_SMTP_SECRET" ]; then
+            echo "❌ SELF_SMTP_SECRET variable is empty."
+            exit 1
+          fi
           
           if ! jq -e 'type == "array"' <<< "$DOMAIN" ; then
             echo "❌ DOMAIN variable must be a JSON array (e.g., [\"example.com\"])."
@@ -143,7 +154,8 @@ jobs:
           sed -i "s|\${ADMIN}|${ADMIN}|g" "$CONFIG_FILE"
           sed -i "s|\${JWT_SECRET}|${JWT_SECRET}|g" "$CONFIG_FILE"
           sed -i "s|\${INIT_SECRET}|${INIT_SECRET}|g" "$CONFIG_FILE"
-          sed -i "s|\${RESEND_WEBHOOK_SECRET}|${RESEND_WEBHOOK_SECRET}|g" "$CONFIG_FILE"
+          sed -i "s|\${SELF_SMTP_URL}|${SELF_SMTP_URL}|g" "$CONFIG_FILE"
+          sed -i "s|\${SELF_SMTP_SECRET}|${SELF_SMTP_SECRET}|g" "$CONFIG_FILE"
           sed -i "s|\${R2_BUCKET_NAME}|${R2_BUCKET_NAME}|g" "$CONFIG_FILE"
           sed -i "s|\${PROJECT_LINK}|${PROJECT_LINK}|g" "$CONFIG_FILE"
           sed -i "s|\${ANALYSIS_CACHE}|${ANALYSIS_CACHE}|g" "$CONFIG_FILE"
