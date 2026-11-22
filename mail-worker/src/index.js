@@ -18,7 +18,16 @@ export default {
 		}
 
 		 if (['/static/','/attachments/'].some(p => url.pathname.startsWith(p))) {
-			 return await kvObjService.toObjResp( { env }, url.pathname.substring(1));
+			 // R2/KV 绑定缺失或 key 不存在时不再把内部异常抛给客户端，
+			 // 统一 404，避免泄露后端实现细节（error code: 1101）。
+			 try {
+				 const resp = await kvObjService.toObjResp( { env }, url.pathname.substring(1));
+				 if (!resp) return new Response('Not Found', { status: 404 });
+				 return resp;
+			 } catch (e) {
+				 console.error('static read failed', url.pathname, e);
+				 return new Response('Not Found', { status: 404 });
+			 }
 		 }
 
 		return env.assets.fetch(req);

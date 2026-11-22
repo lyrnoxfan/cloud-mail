@@ -42,6 +42,8 @@ analysis_cache = "${ANALYSIS_CACHE}"
 domain = "${DOMAIN}"
 admin = "${ADMIN}"
 jwt_secret = "${JWT_SECRET}"
+init_secret = "${INIT_SECRET}"
+resend_webhook_secret = "${RESEND_WEBHOOK_SECRET}"
 project_link = "${PROJECT_LINK}"
 
 [build]

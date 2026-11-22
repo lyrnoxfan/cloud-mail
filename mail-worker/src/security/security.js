@@ -8,6 +8,13 @@ import permService from '../service/perm-service';
 import { t } from '../i18n/i18n'
 import app from '../hono/hono';
 
+// 注意：'/telegram'、'/webhooks'、'/init' 留在 exclude 里是有意的——
+// Telegram Web App、Resend 回调、部署流水线都拿不到登录 JWT，
+// 它们各自在 handler 里验自己的凭证：
+//   /telegram/getEmail → 作用域 token（用途 + 归属 + 7 天有效期，见 jwt-utils）
+//   /webhooks          → Svix 签名（RESEND_WEBHOOK_SECRET，见 resend-api.js）
+//   /init              → 专用 INIT_SECRET，与 jwt_secret 分离（见 init/init.js）
+// 不要以"移出白名单"为由直接删掉这三项，那样会直接断掉对应功能。
 const exclude = [
 	'/login',
 	'/register',

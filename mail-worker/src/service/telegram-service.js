@@ -20,13 +20,20 @@ const telegramService = {
 
 		const { token } = params
 
-		const result = await jwtUtils.verifyToken(c, token);
+		// 作用域 token：用途 + 7 天有效期 + 派生密钥，登录 token 无法冒充。
+		const result = await jwtUtils.verifyTelegramToken(c, token);
 
 		if (!result) {
 			return emailTextTemplate('Access denied')
 		}
 
 		const emailRow = await orm(c).select().from(email).where(eq(email.emailId, result.emailId)).get();
+
+		// 归属校验：token 里的 userId 必须与邮件属主一致，否则拒绝。
+		// 没有这一步时，任意一个合法 token 就能通过改 emailId 读全站邮件。
+		if (!emailRow || emailRow.userId !== result.userId) {
+			return emailTextTemplate('Access denied')
+		}
 
 		if (emailRow) {
 
@@ -49,7 +56,7 @@ const telegramService = {
 
 		const tgChatIds = tgChatId.split(',');
 
-		const jwtToken = await jwtUtils.generateToken(c, { emailId: email.emailId })
+		const jwtToken = await jwtUtils.generateTelegramToken(c, { emailId: email.emailId, userId: email.userId })
 
 		const webAppUrl = customDomain ? `${domainUtils.toOssDomain(customDomain)}/api/telegram/getEmail/${jwtToken}` : 'https://www.cloudflare.com/404'
 		const inlineKeyboard = [

@@ -2,13 +2,30 @@ import settingService from '../service/setting-service';
 import emailUtils from '../utils/email-utils';
 import {emailConst} from "../const/entity-const";
 
+// 恒定时间比较：先对两边做 SHA-256 再逐字节比对，避免用时差泄露口令。
+async function timingSafeEqual(a, b) {
+	const encoder = new TextEncoder();
+	const [ha, hb] = await Promise.all([
+		crypto.subtle.digest('SHA-256', encoder.encode(a)),
+		crypto.subtle.digest('SHA-256', encoder.encode(b)),
+	]);
+	const x = new Uint8Array(ha);
+	const y = new Uint8Array(hb);
+	let diff = 0;
+	for (let i = 0; i < x.length; i += 1) diff |= x[i] ^ y[i];
+	return diff === 0;
+}
+
 const dbInit = {
 	async init(c) {
 
-		const secret = c.req.param('secret');
-
-		if (secret !== c.env.jwt_secret) {
-			return c.text('❌ JWT secret mismatch');
+		// 初始化口令与 JWT 签名密钥分离：/api/init 不再用 jwt_secret 做比对，
+		// 否则该端点就是 jwt_secret 的在线预言机。错误一律返回同一 403，
+		// 不透露"密钥对不对"的任何信息。INIT_SECRET 只在部署流水线里使用。
+		const secret = c.req.param('secret') || '';
+		const expected = c.env.init_secret || '';
+		if (!expected || !(await timingSafeEqual(secret, expected))) {
+			return c.text('forbidden', 403);
 		}
 
 		await this.intDB(c);
