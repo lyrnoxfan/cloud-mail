@@ -43,7 +43,8 @@ domain = "${DOMAIN}"
 admin = "${ADMIN}"
 jwt_secret = "${JWT_SECRET}"
 init_secret = "${INIT_SECRET}"
-resend_webhook_secret = "${RESEND_WEBHOOK_SECRET}"
+SELF_SMTP_URL = "${SELF_SMTP_URL}"
+SELF_SMTP_SECRET = "${SELF_SMTP_SECRET}"
 project_link = "${PROJECT_LINK}"
 
 [build]

@@ -542,6 +542,10 @@ const handleKeyDown = (event) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
+  //默认发件通道改为自建（ccs postfix 中转）
+  if (settingStore.settings.hasSelfSmtp && form.sendChannel === 'default') {
+    form.sendChannel = 'self';
+  }
 });
 
 onUnmounted(() => {

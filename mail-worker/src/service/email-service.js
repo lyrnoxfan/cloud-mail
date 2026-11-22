@@ -9,7 +9,6 @@ import accountService from './account-service';
 import BizError from '../error/biz-error';
 import emailUtils from '../utils/email-utils';
 import fileUtils from '../utils/file-utils';
-import { Resend } from 'resend';
 import attService from './att-service';
 import { parseHTML } from 'linkedom';
 import userService from './user-service';
@@ -253,7 +252,7 @@ const emailService = {
 			accountId, //发送账号id
 			name, //发件人名字
 			sendType, //发件类型
-			sendChannel, //发件通道：'self'走自建服务器，不传或其他值走默认通道（Cloudflare Email优先，否则Resend）
+			sendChannel, //发件通道：'self'走自建服务器；不传或'default'时配了自建就走自建，否则走 Cloudflare Email
 			emailId, //邮件id，如果是回复邮件会带
 			receiveEmail, //收件人邮箱
 			text, //邮件纯文本
@@ -262,7 +261,7 @@ const emailService = {
 			attachments = [] //附件
 		} = params;
 
-		const { resendTokens, r2Domain, send, domainList } = await settingService.query(c);
+		const { r2Domain, send, domainList } = await settingService.query(c);
 
 		let { imageDataList, html } = await attService.toImageUrlHtml(c, content);
 
@@ -327,17 +326,16 @@ const emailService = {
 
 		}
 
-		const domain = emailUtils.getDomain(accountRow.email);
-		const resendToken = resendTokens[domain];
 		const useCloudflareEmail = !!c.env.email;
-		const useSelfSmtp = sendChannel === 'self';
+		//默认通道：配了自建发信就走自建（ccs postfix 中转）；只有显式选 default 且没配自建时才走其他通道
+		const useSelfSmtp = sendChannel === 'self' || ((!sendChannel || sendChannel === 'default') && !!c.env.SELF_SMTP_URL);
 
 		//如果接收方存在站外邮箱，又没有发信服务
 		if (!allInternal) {
 			if (useSelfSmtp && !c.env.SELF_SMTP_URL) {
 				throw new BizError(t('selfSmtpNotConfigured'));
 			}
-			if (!useSelfSmtp && !useCloudflareEmail && !resendToken) {
+			if (!useSelfSmtp && !useCloudflareEmail) {
 				throw new BizError(t('noSendProvider'));
 			}
 		}
@@ -364,7 +362,7 @@ const emailService = {
 
 		let sendResult = {};
 
-		//存在站外邮箱时，自建通道走自有服务器；默认通道下如果配置了 Cloudflare Email Service 就优先使用，否则使用 Resend
+		//存在站外邮箱时：自建通道（或默认通道且已配自建）走 ccs 自有服务器；否则走 Cloudflare Email Service；两者都没有则前面已抛 noSendProvider
 		if (!allInternal) {
 
 			if (useSelfSmtp) {
@@ -379,20 +377,8 @@ const emailService = {
 					sendType,
 					messageId: emailRow.messageId
 				});
-			} else if (useCloudflareEmail) {
-				sendResult = await this.sendByCloudflareEmail(c, {
-					name,
-					accountEmail: accountRow.email,
-					receiveEmail,
-					subject,
-					text,
-					html,
-					attachments: [...imageDataList, ...attachments],
-					sendType,
-					messageId: emailRow.messageId
-				});
 			} else {
-				sendResult = await this.sendByResend(resendToken, {
+				sendResult = await this.sendByCloudflareEmail(c, {
 					name,
 					accountEmail: accountRow.email,
 					receiveEmail,
@@ -525,28 +511,6 @@ const emailService = {
 				id: result.messageId
 			}
 		};
-	},
-
-	async sendByResend(resendToken, params) {
-		const resend = new Resend(resendToken);
-
-		const sendForm = {
-			from: `${params.name} <${params.accountEmail}>`,
-			to: [...params.receiveEmail],
-			subject: params.subject,
-			text: params.text,
-			html: params.html,
-			attachments: await this.toResendAttachments(params.attachments)
-		};
-
-		if (params.sendType === 'reply') {
-			sendForm.headers = {
-				'in-reply-to': params.messageId,
-				'references': params.messageId
-			};
-		}
-
-		return await resend.emails.send(sendForm);
 	},
 
 	//经自建服务器发件：把邮件投递任务 POST 给自建 SMTP 中转服务，由它经本机 postfix 发出
