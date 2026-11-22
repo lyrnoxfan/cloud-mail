@@ -64,7 +64,7 @@ html, body {
     --email-right-click-background: var(--accent-soft);
     --loadding-background: var(--bg);
     --loading-hide-transition: opacity .3s ease;
-    --message-block-color: rgba(0, 0, 0, .4);
+    --message-block-color: transparent; /* 浅色模式不给邮件正文加蒙层，蒙层只在深色模式启用 */
     --settings-page-background: var(--bg);
 
     /* Element Plus 对齐 */
@@ -103,6 +103,7 @@ html.dark {
     --accent-2-soft: rgba(139, 163, 224, .14);
     --separator: #2e2c33;
     --separator-strong: #3d3a44;
+    --message-block-color: rgba(0, 0, 0, .4); /* 深色模式给白底邮件正文加蒙层，避免刺眼 */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, .3);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, .4);
     --tabbar-bg: rgba(22, 22, 29, .94);

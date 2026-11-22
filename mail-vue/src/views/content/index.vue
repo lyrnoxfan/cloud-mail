@@ -479,6 +479,10 @@ const handleDelete = () => {
   }
 }
 
+.shadow-html {
+  position: relative;
+}
+
 .shadow-html::after  {
   content: "";
   position: absolute;
@@ -486,7 +490,7 @@ const handleDelete = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--message-block-color); /* 半透明黑色蒙层 */
+  background: var(--message-block-color); /* 半透明黑色蒙层，深色模式才有颜色 */
   pointer-events: none; /* 不影响点击 */
 }
 
